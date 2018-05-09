@@ -42,7 +42,8 @@ class Index(scrapy.spiders.Spider):
                 video_url = "https://vtt.tumblr.com/tumblr_" + video_name + ".mp4"
                 video_url_list.add(video_url)
             next_index = "2"
-            next_timestamp = response.body.split("/dashboard/2")[1].split("\"")[0][1:]
+            body = body.decode()
+            next_timestamp = body.split("/dashboard/2")[1].split("\"")[0][1:]
             url = "https://www.tumblr.com/svc/dashboard/" + next_index + "/" + next_timestamp + \
                   "?nextAdPos=8&stream_cursor=" + stream_cursor
             yield Request(url, callback=self.parse, cookies=cookieObj)
@@ -56,8 +57,10 @@ class Index(scrapy.spiders.Spider):
                 video_url_list.add(video_url)
             with open("data.json", 'wb') as f:
                 try:
-                    f.write(json.dumps(list(video_url_list)))
-                except Exception, e:
+                    s = json.dumps(list(video_url_list))
+                    s = s.encode("utf-8")
+                    f.write(s)
+                except Exception as e:
                     print("error in result", e)
             try:
                 next_index = json.loads(response.body)['meta']['tumblr_next_page'].split('/')[3]
@@ -67,5 +70,5 @@ class Index(scrapy.spiders.Spider):
                 url = "https://www.tumblr.com/svc/dashboard/" + next_index + "/" + next_timestamp + \
                       "?nextAdPos=8&stream_cursor=" + stream_cursor
                 yield Request(url, callback=self.parse, cookies=cookieObj)
-            except Exception, e:
+            except Exception as e:
                 print("error in result", e)
