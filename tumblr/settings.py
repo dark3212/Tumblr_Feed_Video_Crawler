@@ -11,7 +11,7 @@ FILES_EXPIRES = 90
 FEED_EXPORT_ENCODING = 'utf-8'
 
 DOWNLOADER_MIDDLEWARES = {
-    'tumblr.middlewares.LocalProxySpiderMiddleware': 543,
+    'tumblr.middlewares.TumblrspiderSpiderMiddleware': 543,
 }
 
 ITEM_PIPELINES = {
