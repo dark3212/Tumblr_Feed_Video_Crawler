@@ -57,7 +57,7 @@ class Index(scrapy.spiders.Spider):
                 video_url = "https://vtt.tumblr.com/tumblr_" + video_name + ".mp4"
 
                 video_path = 'video/' + video_name
-                item = items.TumblrspiderItem()
+                item = items.TumblrItem()
                 item['file_url'] = video_url
                 item['file_path'] = video_path
                 item['file_type'] = 'video'
