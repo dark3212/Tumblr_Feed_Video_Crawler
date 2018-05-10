@@ -4,6 +4,7 @@ import json
 import scrapy
 from lxml import etree
 from scrapy.http.request import Request
+from .. import items
 
 stream_cursor = "eyJGb2xsb3dlZFNlYXJjaFBvc3QiOltdLCJiZWZvcmVfaWQiOiIxNjI2ODY4NDM3NDMifQ%3D%3D"
 
@@ -54,14 +55,21 @@ class Index(scrapy.spiders.Spider):
             for video in video_list:
                 video_name = video.xpath("@src")[0].split("tumblr_")[1].split("/")[0]
                 video_url = "https://vtt.tumblr.com/tumblr_" + video_name + ".mp4"
-                video_url_list.add(video_url)
-            with open("data.json", 'wb') as f:
-                try:
-                    s = json.dumps(list(video_url_list))
-                    s = s.encode("utf-8")
-                    f.write(s)
-                except Exception as e:
-                    print("error in result", e)
+
+                video_path = 'video/' + video_name
+                item = items.TumblrspiderItem()
+                item['file_url'] = video_url
+                item['file_path'] = video_path
+                item['file_type'] = 'video'
+                yield item
+            #     video_url_list.add(video_url)
+            # with open("data.json", 'wb') as f:
+            #     try:
+            #         s = json.dumps(list(video_url_list))
+            #         s = s.encode("utf-8")
+            #         f.write(s)
+            #     except Exception as e:
+            #         print("error in result", e)
             try:
                 next_index = json.loads(response.body)['meta']['tumblr_next_page'].split('/')[3]
                 if int(next_index) > int(maxPage):
