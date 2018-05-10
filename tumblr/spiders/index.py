@@ -53,8 +53,8 @@ class Index(scrapy.spiders.Spider):
             html = etree.HTML(body)
             video_list = html.xpath("//source")
             for video in video_list:
-                video_name = video.xpath("@src")[0].split("tumblr_")[1].split("/")[0]
-                video_url = "https://vtt.tumblr.com/tumblr_" + video_name + ".mp4"
+                video_name = video.xpath("@src")[0].split("tumblr_")[1].split("/")[0]+ ".mp4"
+                video_url = "https://vtt.tumblr.com/tumblr_" + video_name
 
                 video_path = 'video/' + video_name
                 item = items.TumblrItem()
