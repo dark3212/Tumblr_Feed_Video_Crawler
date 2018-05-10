@@ -42,6 +42,12 @@ class Index(scrapy.spiders.Spider):
                 video_name = video.xpath("@src")[0].split("tumblr_")[1].split("/")[0]
                 video_url = "https://vtt.tumblr.com/tumblr_" + video_name + ".mp4"
                 video_url_list.add(video_url)
+                video_path = 'video/' + video_name
+                item = items.TumblrItem()
+                item['file_url'] = video_url
+                item['file_path'] = video_path
+                item['file_type'] = 'video'
+                yield item
             next_index = "2"
             body = body.decode()
             next_timestamp = body.split("/dashboard/2")[1].split("\"")[0][1:]
